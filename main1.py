@@ -18,18 +18,20 @@ ACCOUNT_INFO_URL_TEMPLATE           = 'https://www.binance.com/en/futures-activi
 
 # modifying DataFrame, including calculating estimated entry size in USDT
 def modify_data(data) -> pd.DataFrame:
-    df                              = pd.DataFrame(data)
-    position                        = pd.DataFrame(df['data'][0])
-    position['estimatedEntrySize']  = round((abs(position['amount']) / position['leverage']) * position['entryPrice'], 2)
-    position['pnl']                 = round(position['pnl'], 2)
+    df = pd.DataFrame(data)
+    position = pd.DataFrame(df['data'][0])
+    position['estimatedEntrySize'] = round((abs(position['amount']) / position['leverage']) * position['entryPrice'], 2)
+    position['pnl'] = round(position['pnl'], 2)
     position.loc[(position['amount'] > 0), 'estimatedPosition'] = 'LONG'
     position.loc[(position['amount'] < 0), 'estimatedPosition'] = 'SHORT'
-    position['updateTime']          = position['updateTime'].apply(lambda x: datetime.datetime(*x[:-1], x[-1] // 1000))
-    position['updateTime']          = position['updateTime'].dt.strftime('%Y-%m-%d %H:%M:%S')
-    position_result                 = position[['estimatedPosition', 'leverage', 'estimatedEntrySize', 'amount',
-                                                'entryPrice', 'markPrice', 'pnl', 'updateTime']]
-    position_result['symbol']       = position.index
+    position['updateTime'] = position['updateTime'].apply(lambda x: datetime.datetime(*x[:-1], x[-1] // 1000))
+    position['updateTime'] = position['updateTime'].dt.strftime('%Y-%m-%d %H:%M:%S')
+    position_result = position[['estimatedPosition', 'leverage', 'estimatedEntrySize', 'amount',
+                                 'entryPrice', 'markPrice', 'pnl', 'updateTime']]
+    position_result['symbol'] = position.index
+    position_result['direction'] = position['estimatedPosition'].apply(lambda x: 'LONG' if x == 'LONG' else 'SHORT')
     return position_result
+
 
 
 previous_symbols                    = {}

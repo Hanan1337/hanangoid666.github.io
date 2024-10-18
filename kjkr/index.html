@@ -485,7 +485,7 @@
 				<div class="myresize"></div>
 			</div>
 		</div>
-		<span style="position: absolute; text-align: center; line-height: 100vh; width: 100vw; z-index:-10;">jangan dijual bos</span>
+		<!--<span style="position: absolute; text-align: center; line-height: 100vh; width: 100vw; z-index:-10;">jangan dijual bos</span>-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	  	<script type="text/javascript">
 	  		/*
@@ -497,6 +497,11 @@
 	  		http://stackoverflow.com/questions/8960193/how-to-make-html-element-resizable-using-pure-javascript/33523184
 
 	  		*/
+
+			$(document).ready(function(){
+            		$('span').remove(); // Menghapus semua elemen span
+       			 });
+			
 	  		namaku=localStorage.getItem("nama");
 			blur="true"; 
 			$(window).on('load',function(){
